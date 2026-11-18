@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PERC Sense Key Analyzer | T10.org SCSI Reference</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <span class="brand-title">PERC SENSE KEY ANALYZER</span>
+        <span class="brand-sub">Dell TSR / TTY / LSI Storage Log &times; T10.org SCSI Standard</span>
+      </div>
+      <nav class="tabs" role="tablist">
+        <button class="tab-btn active" data-tab="analyzer" type="button">TSR ログ解析</button>
+        <button class="tab-btn" data-tab="reference" type="button">T10.org 標準リファレンス検索</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- TAB 1: TSR LOG ANALYZER -->
+    <section id="tab-analyzer" class="tab-panel active">
+      <div class="upload-bar">
+        <div id="dropzone" class="dropzone" tabindex="0">
+          <input id="file-input" type="file" accept=".zip,.log,.txt,.out,.gz" hidden />
+          <div class="dropzone-text">
+            <strong>TSR (.zip) または ストレージログ (.log / .txt) をドロップ</strong>
+            <span>またはクリックしてファイルを選択 (ZIP内の tty / lsi / perc ログを自動抽出)</span>
+          </div>
+          <div class="upload-actions">
+            <button id="btn-select-file" class="btn btn-primary" type="button">ファイルを選択</button>
+            <button id="btn-load-sample" class="btn btn-secondary" type="button">サンプルTSRで試す</button>
+          </div>
+        </div>
+        <div id="upload-status" class="status-line hidden"></div>
+      </div>
+
+      <div id="extracted-info" class="extracted-info hidden">
+        <div class="extracted-meta">
+          <span class="meta-label">アーカイブ:</span>
+          <span id="meta-filename" class="mono"></span>
+          <span class="meta-sep">|</span>
+          <span class="meta-label">検出件数:</span>
+          <span id="meta-total" class="mono"></span>
+          <span class="meta-sep">|</span>
+          <span class="meta-label">ユニークSense種別:</span>
+          <span id="meta-unique" class="mono"></span>
+        </div>
+        <div id="extracted-files" class="file-chips"></div>
+      </div>
+
+      <div id="analyzer-workspace" class="workspace hidden">
+        <div class="list-pane">
+          <div class="pane-header">
+            <h2>検出された Sense Key 一覧</h2>
+            <input id="detected-filter" class="input-search" type="text" placeholder="コード / キーワード / PD で絞り込み..." />
+          </div>
+          <div id="sk-filter-pills" class="pill-bar"></div>
+          <div id="detected-list" class="sense-list"></div>
+        </div>
+
+        <div class="detail-pane">
+          <div id="detected-detail" class="detail-content">
+            <div class="empty-detail">左の一覧から Sense Key をクリックすると、T10.org 標準仕様とログ内の該当箇所が表示されます。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: T10.ORG REFERENCE SEARCH -->
+    <section id="tab-reference" class="tab-panel">
+      <div class="ref-search-bar">
+        <input id="ref-query" class="input-search ref-input" type="text" placeholder="Sense Key / ASC / ASCQ またはキーワードで検索 (例: 3/11/00, 11/00, 24, UNRECOVERED READ, CDB)..." />
+        <select id="ref-sk-select" class="select-box">
+          <option value="">すべての Sense Key (0h–Fh)</option>
+        </select>
+        <button id="btn-ref-search" class="btn btn-primary" type="button">検索</button>
+      </div>
+
+      <div class="workspace">
+        <div class="list-pane">
+          <div class="pane-header">
+            <h2>T10.org 標準コード一覧</h2>
+            <span id="ref-count" class="mono muted"></span>
+          </div>
+          <div id="ref-sk-list" class="ref-section"></div>
+          <div id="ref-asc-list" class="sense-list"></div>
+        </div>
+
+        <div class="detail-pane">
+          <div id="ref-detail" class="detail-content">
+            <div class="empty-detail">左の Sense Key または ASC/ASCQ をクリックすると詳細が表示されます。</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
